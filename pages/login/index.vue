@@ -11,22 +11,45 @@
             </p>
 
             <ul class="error-messages">
-            <li>That email is already taken</li>
+                <template v-for="(messages, field) in errors">
+                    <li
+                        v-for="(message, index) in messages"
+                        :key="index"
+                    >{{ field }} {{ message }}</li>
+                </template>
             </ul>
 
-            <form>
-            <fieldset class="form-group" v-if="!isLogin">
-                <input class="form-control form-control-lg" type="text" placeholder="Your Name">
-            </fieldset>
-            <fieldset class="form-group">
-                <input class="form-control form-control-lg" type="text" placeholder="Email">
-            </fieldset>
-            <fieldset class="form-group">
-                <input class="form-control form-control-lg" type="password" placeholder="Password">
-            </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right">
-                {{ isLogin ? 'Sign in' : 'Sign up' }}
-            </button>
+            <form @submit.prevent="onSubmit">
+                <fieldset class="form-group" v-if="!isLogin">
+                    <input
+                        v-model="user.username"
+                        class="form-control form-control-lg"
+                        type="text"
+                        placeholder="Your Name"
+                        required
+                    >
+                </fieldset>
+                <fieldset class="form-group">
+                    <input
+                        v-model="user.email"
+                        class="form-control form-control-lg"
+                        type="email"
+                        placeholder="Email"
+                        required
+                    >
+                </fieldset>
+                <fieldset class="form-group">
+                    <input
+                        v-model="user.password"
+                        class="form-control form-control-lg"
+                        type="password"
+                        placeholder="Password"
+                        required
+                    >
+                </fieldset>
+                <button class="btn btn-lg btn-primary pull-xs-right">
+                    {{ isLogin ? 'Sign in' : 'Sign up' }}
+                </button>
             </form>
         </div>
 
@@ -36,13 +59,43 @@
 </template>
 
 <script>
+
+import { login } from '@/api/user'
+
 export default {
     name: 'LoginIndex',
     computed: {
         isLogin () {
             return this.$route.name === 'login';
         }
+    },
+
+    data () {
+        return {
+            user: {
+                email: '',
+                password: '',
+                username: ''
+            },
+            errors: {}
+        }
+    },
+    
+    methods: {
+        async onSubmit () {
+            try {
+                const { data } = await login({
+                        user: this.user
+                    }
+                );
+                this.$router.push('/');
+            } catch (err) {
+                this.errors = err.response.data.errors
+            }
+
+        }
     }
+
 }
 </script>
 
