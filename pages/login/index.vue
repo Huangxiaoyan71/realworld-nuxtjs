@@ -44,6 +44,7 @@
                         class="form-control form-control-lg"
                         type="password"
                         placeholder="Password"
+                        minlength="8"
                         required
                     >
                 </fieldset>
@@ -60,13 +61,13 @@
 
 <script>
 
-import { login } from '@/api/user'
+import { login, register } from '@/api/user'
 
 export default {
     name: 'LoginIndex',
     computed: {
         isLogin () {
-            return this.$route.name === 'login';
+            return this.$router.name === 'login';
         }
     },
 
@@ -84,13 +85,17 @@ export default {
     methods: {
         async onSubmit () {
             try {
-                const { data } = await login({
+                const { data } = this.isLogin
+                ? await login({
                         user: this.user
-                    }
-                );
+                    })
+                : await register({
+                        user: this.user
+                    });
+                this.$store.commit('setUser', data.user);
                 this.$router.push('/');
             } catch (err) {
-                this.errors = err.response.data.errors
+                this.errors = err.response.data.errors;
             }
 
         }

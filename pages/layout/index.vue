@@ -32,7 +32,7 @@
           </li>
           <li class="nav-item">
             <nuxt-link
-              to="login"
+              to="/register"
               class="nav-link">Sign up</nuxt-link>
           </li>
           <li class="nav-item">
