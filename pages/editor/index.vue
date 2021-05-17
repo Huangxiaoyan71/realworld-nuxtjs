@@ -32,7 +32,8 @@
 
 <script>
 export default {
-    name: 'EditorPage'
+    name: 'EditorPage',
+    middleware: 'authenticated'
 }
 </script>
 

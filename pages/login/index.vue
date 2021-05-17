@@ -61,13 +61,14 @@
 
 <script>
 
-import { login, register } from '@/api/user'
+import { login, register } from '@/api/user';
+const Cookie = process.client ? require('js-cookie') : undefined;
 
 export default {
     name: 'LoginIndex',
     computed: {
         isLogin () {
-            return this.$router.name === 'login';
+            return this.$route.name === 'login';
         }
     },
 
@@ -92,7 +93,12 @@ export default {
                 : await register({
                         user: this.user
                     });
+
+                // 存储登录状态
                 this.$store.commit('setUser', data.user);
+                // 数据持久化
+                Cookie.set('user', data.user);
+
                 this.$router.push('/');
             } catch (err) {
                 this.errors = err.response.data.errors;

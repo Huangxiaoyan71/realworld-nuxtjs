@@ -16,37 +16,47 @@
               exact
             >Home</nuxt-link>
           </li>
-          <li class="nav-item">
-            <nuxt-link
-              to="/editor"
-              class="nav-link">
-              <i class="ion-compose"></i>&nbsp;New Post
-            </nuxt-link>
-          </li>
-          <li class="nav-item">
-            <nuxt-link
-              to="/setting"
-              class="nav-link">
-              <i class="ion-gear-a"></i>&nbsp;Settings
-            </nuxt-link>
-          </li>
-          <li class="nav-item">
-            <nuxt-link
-              to="/register"
-              class="nav-link">Sign up</nuxt-link>
-          </li>
-          <li class="nav-item">
-            <nuxt-link
-              to="/profile/1"
-              class="nav-link"
-            >
-              <img
-                class="user-pic"
-                src="https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=265704898,674087460&fm=58"
-                alt="avator" />
-                hxy716
-            </nuxt-link>
-          </li>
+
+          <template v-if="user">
+            <li class="nav-item">
+              <nuxt-link
+                to="/editor"
+                class="nav-link">
+                <i class="ion-compose"></i>&nbsp;New Post
+              </nuxt-link>
+            </li>
+            <li class="nav-item">
+              <nuxt-link
+                to="/setting"
+                class="nav-link">
+                <i class="ion-gear-a"></i>&nbsp;Settings
+              </nuxt-link>
+            </li>
+            <li class="nav-item">
+              <nuxt-link
+                to="/profile/1"
+                class="nav-link"
+              >
+                <img
+                  class="user-pic"
+                  :src="user.image || 'https://dss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=265704898,674087460&fm=58'"
+                  alt="avator" />
+                  {{ user.username }}
+              </nuxt-link>
+            </li>
+          </template>
+          <template v-else>
+            <li class="nav-item">
+              <nuxt-link
+                to="/login"
+                class="nav-link">Sign in</nuxt-link>
+            </li>
+            <li class="nav-item">
+              <nuxt-link
+                to="/register"
+                class="nav-link">Sign up</nuxt-link>
+            </li>
+          </template>
         </ul>
       </div>
     </nav>
@@ -69,8 +79,13 @@
 </template>
 
 <script>
-export default {
+import { mapState } from 'vuex';
 
+export default {
+  name: 'LayoutIndex',
+  computed: {
+    ...mapState(['user'])
+  }
 }
 </script>
 
